@@ -57,12 +57,17 @@ extension SceneDelegate {
         
         let tableViewVC = SimpleTableViewExampleViewController()
         tableViewVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "tablecells"), selectedImage: UIImage(systemName: "tablecells.fill"))
+        let tableViewController = UINavigationController(rootViewController: tableViewVC)
+        
         let validationVC = SimpleValidationViewController()
         validationVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "text.page"), selectedImage: UIImage(systemName: "text.page.fill"))
+        let validationController = UINavigationController(rootViewController: validationVC)
+        
         let numbersVC = NumbersViewController()
         numbersVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "numbers.rectangle"), selectedImage: UIImage(systemName: "numbers.rectangle.fill"))
+        let numbersController = UINavigationController(rootViewController: numbersVC)
         
-        tabBarController.viewControllers = [tableViewVC, validationVC, numbersVC]
+        tabBarController.viewControllers = [tableViewController, validationController, numbersController]
         tabBarController.tabBar.tintColor = .systemGray2
         tabBarController.tabBar.unselectedItemTintColor = .systemGray4
         
