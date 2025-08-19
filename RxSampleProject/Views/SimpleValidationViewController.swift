@@ -59,7 +59,7 @@ final class SimpleValidationViewController: BaseViewController {
         let button = UIButton()
         button.setTitle("Do Something", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemGreen
+        button.backgroundColor = .green
         button.layer.cornerRadius = 8
         return button
     }()
