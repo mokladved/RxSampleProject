@@ -7,6 +7,8 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 final class SimpleTableViewCell: UITableViewCell {
     
@@ -19,14 +21,6 @@ final class SimpleTableViewCell: UITableViewCell {
         return label
     }()
     
-    let infoButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "info.circle"), for: .normal)
-        button.clipsToBounds = true
-        return button
-    }()
-    
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureHierarchy()
@@ -38,33 +32,25 @@ final class SimpleTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
-    override func layoutSubviews() {
-        infoButton.layer.cornerRadius = infoButton.frame.height / 2
+    override func prepareForReuse() {
+        super.prepareForReuse()
     }
 }
 
 extension SimpleTableViewCell: UIConfigurable {
     func configureHierarchy() {
         contentView.addSubview(infoLabel)
-        contentView.addSubview(infoButton)
+
     }
     
     func configureLayout() {
         infoLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(16)
+            make.horizontalEdges.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
-        }
-        
-        infoButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-16)
-            make.centerY.equalToSuperview()
-            make.width.height.equalTo(44)
         }
     }
     
     func configureView() {
-        contentView.backgroundColor = .white
+        
     }
 }
