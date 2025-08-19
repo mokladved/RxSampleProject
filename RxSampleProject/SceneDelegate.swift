@@ -56,15 +56,15 @@ extension SceneDelegate {
         let tabBarController = UITabBarController()
         
         let tableViewVC = SimpleTableViewExampleViewController()
-        tableViewVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "tablecells"), selectedImage: UIImage(systemName: "tablecells.fill"))
+        tableViewVC.tabBarItem = UITabBarItem(title: "Simple table view", image: UIImage(systemName: "tablecells"), selectedImage: UIImage(systemName: "tablecells.fill"))
         let tableViewController = UINavigationController(rootViewController: tableViewVC)
         
         let validationVC = SimpleValidationViewController()
-        validationVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "text.page"), selectedImage: UIImage(systemName: "text.page.fill"))
+        validationVC.tabBarItem = UITabBarItem(title: "Simple Validation", image: UIImage(systemName: "text.page"), selectedImage: UIImage(systemName: "text.page.fill"))
         let validationController = UINavigationController(rootViewController: validationVC)
         
         let numbersVC = NumbersViewController()
-        numbersVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "numbers.rectangle"), selectedImage: UIImage(systemName: "numbers.rectangle.fill"))
+        numbersVC.tabBarItem = UITabBarItem(title: "Adding numbers", image: UIImage(systemName: "numbers.rectangle"), selectedImage: UIImage(systemName: "numbers.rectangle.fill"))
         let numbersController = UINavigationController(rootViewController: numbersVC)
         
         tabBarController.viewControllers = [tableViewController, validationController, numbersController]
