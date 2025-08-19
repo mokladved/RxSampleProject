@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
-        window?.rootViewController = SimpleTableViewExampleViewController()
+        window?.rootViewController = initTabBar()
         window?.makeKeyAndVisible()
     }
 
@@ -48,5 +48,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
+    }
+}
+
+extension SceneDelegate {
+    func initTabBar() -> UITabBarController {
+        let tabBarController = UITabBarController()
+        
+        let tableViewVC = SimpleTableViewExampleViewController()
+        tableViewVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "tablecells"), selectedImage: UIImage(systemName: "tablecells.fill"))
+        let validationVC = SimpleValidationViewController()
+        validationVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "text.page"), selectedImage: UIImage(systemName: "text.page.fill"))
+        let numbersVC = NumbersViewController()
+        numbersVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "numbers.rectangle"), selectedImage: UIImage(systemName: "numbers.rectangle.fill"))
+        
+        tabBarController.viewControllers = [tableViewVC, validationVC, numbersVC]
+        tabBarController.tabBar.tintColor = .systemGray2
+        tabBarController.tabBar.unselectedItemTintColor = .systemGray4
+        
+        return tabBarController
+        
     }
 }
