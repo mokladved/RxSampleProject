@@ -59,7 +59,7 @@ final class SimpleValidationViewController: BaseViewController {
         let button = UIButton()
         button.setTitle("Do Something", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .green
+        button.backgroundColor = .green.withAlphaComponent(0.5)
         button.layer.cornerRadius = 8
         return button
     }()
@@ -160,12 +160,7 @@ final class SimpleValidationViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         everythingValid
-            .map { $0 ? 1.0 : 0.5 }
-            .bind(to: doSomethingButton.rx.alpha)
-            .disposed(by: disposeBag)
-        
-        everythingValid
-            .map { $0 ? UIColor.black : UIColor.white }
+            .map { $0 ? .black : .white }
             .bind(with: self, onNext: { owner, color in
                 owner.doSomethingButton.setTitleColor(color, for: .normal)
             })
