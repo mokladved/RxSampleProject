@@ -13,6 +13,8 @@ import SnapKit
 final class NumbersViewController: BaseViewController {
 
     private let wrappedView = UIView()
+    private let disposeBag = DisposeBag()
+    private let viewModel = NumbersViewModel()
     
     private let firstTextField = {
         let textField = UITextField()
@@ -56,7 +58,6 @@ final class NumbersViewController: BaseViewController {
         return label
     }()
     
-    private let disposeBag = DisposeBag()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -123,11 +124,15 @@ final class NumbersViewController: BaseViewController {
     }
 
     private func bind() {
-        Observable.combineLatest(firstTextField.rx.text.orEmpty, secondTextField.rx.text.orEmpty, thirdTextField.rx.text.orEmpty)
-            .map { textValue1, textValue2, textValue3 -> Int in
-                return (Int(textValue1) ?? 0) + (Int(textValue2) ?? 0) + (Int(textValue3) ?? 0)
-            }
-            .map { "\($0)" }
+        let input = NumbersViewModel.Input(
+            firstNumber: firstTextField.rx.text.orEmpty,
+            secondNumber: secondTextField.rx.text.orEmpty,
+            thirdNumber: thirdTextField.rx.text.orEmpty
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.result
             .bind(to: resultLabel.rx.text)
             .disposed(by: disposeBag)
     }
