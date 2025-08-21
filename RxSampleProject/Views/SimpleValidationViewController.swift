@@ -10,10 +10,10 @@ import RxSwift
 import RxCocoa
 import SnapKit
 
-private let minimalUsernameLength = 5
-private let minimalPasswordLength = 5
 
 final class SimpleValidationViewController: BaseViewController {
+    private let disposeBag = DisposeBag()
+    private let viewModel = SimpleValidationViewModel()
     
     private let usernameLabel = {
         let label = UILabel()
@@ -63,8 +63,6 @@ final class SimpleValidationViewController: BaseViewController {
         button.layer.cornerRadius = 8
         return button
     }()
-    
-    private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -124,51 +122,46 @@ final class SimpleValidationViewController: BaseViewController {
     override func configureView() {
         super.configureView()
         self.title = "Simple Validation"
-        
-        usernameStateLabel.text = "Username has to be at least \(minimalUsernameLength) characters"
-        passwordStateLabel.text = "Password has to be at least \(minimalPasswordLength) characters"
+        usernameStateLabel.text = "Username has to be at least 5 characters"
+        passwordStateLabel.text = "Password has to be at least 5 characters"
     }
     
     
     private func bind() {
+        let input = SimpleValidationViewModel.Input(
+            username: usernameTextField.rx.text.orEmpty,
+            password: passwordTextField.rx.text.orEmpty,
+            buttonTap: doSomethingButton.rx.tap
+        )
         
-        let usernameValid = usernameTextField.rx.text.orEmpty
-            .map { $0.count >= minimalUsernameLength }
-            .share(replay: 1)
-        
-        let passwordValid = passwordTextField.rx.text.orEmpty
-            .map { $0.count >= minimalPasswordLength }
-            .share(replay: 1)
-        
-        let everythingValid = Observable.combineLatest(usernameValid, passwordValid) { $0 && $1 }
-            .share(replay: 1)
-        
-        usernameValid
-            .bind(to: passwordTextField.rx.isEnabled)
-            .disposed(by: disposeBag)
-        
-        usernameValid
+        let output = viewModel.transform(input: input)
+  
+        output.isUsernameValid
             .bind(to: usernameStateLabel.rx.isHidden)
             .disposed(by: disposeBag)
         
-        passwordValid
-            .bind(to: passwordStateLabel.rx.isHidden)
+        output.isUsernameValid
+            .bind(to: passwordTextField.rx.isEnabled)
             .disposed(by: disposeBag)
         
-        everythingValid
+        output.isPasswordValid
+            .bind(to: passwordStateLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+    
+        output.isEverythingValid
             .bind(to: doSomethingButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
-        everythingValid
-            .map { $0 ? .black : .white }
-            .bind(with: self, onNext: { owner, color in
-                owner.doSomethingButton.setTitleColor(color, for: .normal)
-            })
+        output.buttonTapped
+            .bind(with: self) { owner, _ in
+                owner.showAlert(title: "RxExample", message: "This is wonderful")
+            }
             .disposed(by: disposeBag)
         
-        doSomethingButton.rx.tap
-            .bind(with: self) { owner, value in
-                owner.showAlert(title: "RxExample", message: "This is wonderful")
+        output.isEverythingValid
+            .map { $0 ? .black : .white }
+            .bind(with: self) { owner, color in
+                owner.doSomethingButton.setTitleColor(color, for: .normal)
             }
             .disposed(by: disposeBag)
     }
